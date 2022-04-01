@@ -1,0 +1,45 @@
+---
+- name: "Installation des paquets"
+  hosts:
+    - projet
+    - test
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: "Install httpd on projet group"
+      yum:
+        name: httpd
+        state: latest
+        update_cache: True
+      when: ("projet" in group_names)
+
+    - name: "Install apache2  on test group"
+      apt:
+        name: apache2
+        state: latest
+        update_cache: True
+      when: ("test" in group_names)
+
+    - name: "Copy file pageaccueil.j2 into index.html of nodes"
+      template:
+        src: ./pageaccueil.j2
+        dest: /var/www/html/index.html
+      notify: homepage
+
+  handlers:
+    - name: homepage
+      service:
+        name: httpd
+        state: started
+      when: ("projet" in group_names)
+
+    - name: homepage
+      service:
+        name: apache2
+        state: started
+      when: ("test" in group_names)
+
+   
+
+

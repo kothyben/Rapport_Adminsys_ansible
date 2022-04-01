@@ -1,0 +1,26 @@
+---
+- name: "Gestion des partitions et volumes logiques"
+  hosts:
+    - projet
+  become: yes
+  ignore_errors: yes
+
+  tasks:
+    - name: "Create 1 partition of 100Mo"
+      parted: 
+        device: /dev/sdc
+        number: 3
+        state: present
+        part_end: 100MiB
+
+    - name: "Create 2nd partiton of 100Mo"
+      parted:
+        device: /dev/sdc
+        number: 4
+        state: present
+        part_end: 200MiB
+        part_start: 100MiB
+
+
+
+
