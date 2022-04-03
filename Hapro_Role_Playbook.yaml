@@ -1,0 +1,17 @@
+---
+- name: "Equilibrage des charges"
+  hosts: ansible_local
+  become: yes
+
+  vars:
+    haproxy_backend_servers:
+      - name: formation
+        address: 172.19.10.75:8080
+      - name: Node_projet_ansible
+        address: 172.19.10.84:8080
+
+  roles:
+    - { role: haproxy, when: inventory_hostname == "ansible_local" }
+
+
+

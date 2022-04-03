@@ -1,0 +1,15 @@
+---
+- name: "Change target of projet grup"
+  hosts:
+    - projet
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: "Create symbolik link"
+      file:
+        src: /etc/systemd/system/default.target
+        dest: /usr/lib/systemd/system/graphical.target
+        state: link
+
+
