@@ -1,5 +1,5 @@
 ---
-- name: "Planifier la Mise a jour despaquets sur les machins du groupe test"
+- name: "Planifier la Mise a jour des paquets sur les machins du groupe test"
   hosts: test
   become: yes
   gather_facts: no
