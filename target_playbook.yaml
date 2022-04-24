@@ -8,8 +8,8 @@
   tasks:
     - name: "Create symbolik link"
       file:
-        src: /etc/systemd/system/default.target
-        dest: /usr/lib/systemd/system/graphical.target
+        src: /usr/lib/systemd/system/graphical.target
+        dest: /etc/systemd/system/default.target
         state: link
 
 
