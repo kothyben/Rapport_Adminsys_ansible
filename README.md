@@ -8,3 +8,5 @@ les utilisateurs ont des mots de passe que nous avons crypté à l'aide dansible
 le load balacing grâce au role Haproxy
 le partitionnement et la création de disque
 
+Pour finir nous avons aussi paramètrer une tâche qui se lance automatiquement à l'aide de crontab tâche qui met simplement à jour les paquets du système sur lesmachines du groupe test chaque h du matin et tous les jours
+
