@@ -3,23 +3,58 @@
   hosts:
     - projet
   become: yes
+  gather_facts: no
   ignore_errors: yes
 
   tasks:
     - name: "Create 1 partition of 100Mo"
       parted: 
-        device: /dev/sdc
-        number: 3
+        device: /dev/sdd
+        number: 1
         state: present
         part_end: 100MiB
+        
 
     - name: "Create 2nd partiton of 100Mo"
       parted:
-        device: /dev/sdc
-        number: 4
+        device: /dev/sdd
+        number: 2
         state: present
         part_end: 200MiB
         part_start: 100MiB
+        align: optimal
+
+    - name: "Create volum group"
+      lvg:
+        vg: groupvolume2
+        pvs: /dev/sdd1,/dev/sdd2
+        pesize: 8
+
+    - name: "create logical volume"
+      lvol:
+        vg: groupvolume2
+        lv: vollogik2
+        size: 120M
+
+    - name: "Formatage du volume logique"
+      filesystem:
+        fstype: xfs
+        force: yes
+        dev: /dev/groupvolume2/vollogik2
+
+    - name: "create point de montage"
+      file:
+        path: /mnt/logik/
+        state: directory
+        mode: 0777
+
+    - name: "montage du volume logique"
+      mount:
+        path: /mnt/logik/
+        src: /dev/groupvolume2/vollogik2
+        fstype: xfs
+        state: present
+
 
 
 
