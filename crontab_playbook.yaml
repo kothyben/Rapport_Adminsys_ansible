@@ -10,7 +10,7 @@
         name: "update paquets"
         user: "formation"
         hour: "11"
-        job: "sudo apt upgrade"
+        job: "sudo apt update"
 
 
     
