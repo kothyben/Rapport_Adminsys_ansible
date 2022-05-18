@@ -9,16 +9,16 @@
   tasks:
     - name: "Create 1 partition of 100Mo"
       parted: 
-        device: /dev/sdd
-        number: 1
+        device: /dev/sdb
+        number: 3
         state: present
         part_end: 100MiB
         
 
     - name: "Create 2nd partiton of 100Mo"
       parted:
-        device: /dev/sdd
-        number: 2
+        device: /dev/sdb
+        number: 4
         state: present
         part_end: 200MiB
         part_start: 100MiB
@@ -26,33 +26,33 @@
 
     - name: "Create volum group"
       lvg:
-        vg: groupvolume2
-        pvs: /dev/sdd1,/dev/sdd2
-        pesize: 8
+        vg: vgroup2
+        pvs: /dev/sdb3,/dev/sdb4
+        pesize: "8"
 
     - name: "create logical volume"
       lvol:
-        vg: groupvolume2
-        lv: vollogik2
+        vg: vgroup2
+        lv: vlogik2
         size: 120M
 
     - name: "Formatage du volume logique"
       filesystem:
-        fstype: xfs
+        fstype: ext4
         force: yes
-        dev: /dev/groupvolume2/vollogik2
+        dev: /dev/vgroup2/vlogik2
 
     - name: "create point de montage"
       file:
-        path: /mnt/logik/
+        path: /mnt/logik2/
         state: directory
         mode: 0777
 
     - name: "montage du volume logique"
       mount:
-        path: /mnt/logik/
-        src: /dev/groupvolume2/vollogik2
-        fstype: xfs
+        path: /mnt/logik2/
+        src: /dev/vgroup2/vlogik2
+        fstype: ext4
         state: present
 
 
