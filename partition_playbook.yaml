@@ -1,5 +1,5 @@
 ---
-- name: "Gestion des partitions et volumes logiques"
+- name: "Partitions et Creation volumes logiques"
   hosts:
     - projet
   become: yes
@@ -9,38 +9,37 @@
   tasks:
     - name: "Create 1 partition of 100Mo"
       parted: 
-        device: /dev/sdb
-        number: 3
+        device: /dev/sdc
+        number: 1
         state: present
         part_end: 100MiB
         
 
     - name: "Create 2nd partiton of 100Mo"
       parted:
-        device: /dev/sdb
-        number: 4
+        device: /dev/sdc
+        number: 2
         state: present
         part_end: 200MiB
         part_start: 100MiB
-        align: optimal
 
     - name: "Create volum group"
       lvg:
-        vg: vgroup2
-        pvs: /dev/sdb3,/dev/sdb4
+        vg: vgsociete
+        pvs: /dev/sdc1,/dev/sdc2
         pesize: "8"
 
     - name: "create logical volume"
       lvol:
-        vg: vgroup2
-        lv: vlogik2
+        vg: vgsociete
+        lv: lv_ste
         size: 120M
 
     - name: "Formatage du volume logique"
       filesystem:
         fstype: ext4
-        force: yes
-        dev: /dev/vgroup2/vlogik2
+        force: no
+        dev: /dev/vgsociete/lv_ste
 
     - name: "create point de montage"
       file:
@@ -51,10 +50,11 @@
     - name: "montage du volume logique"
       mount:
         path: /mnt/logik2/
-        src: /dev/vgroup2/vlogik2
+        src: /dev/vgsociete/lv_ste
         fstype: ext4
         state: present
-
+  
+    - command: "mount -a"
 
 
 
